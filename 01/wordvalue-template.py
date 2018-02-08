@@ -19,7 +19,7 @@ def calc_word_value(word):
         if char.isalpha():
             score += LETTER_SCORES[char.upper()]
 
-     return score
+    return score
 
 
 def max_word_value(words=load_words()):
