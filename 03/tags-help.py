@@ -2,6 +2,7 @@ from collections import Counter
 from difflib import SequenceMatcher
 from itertools import product
 import re
+from bs4 import BeautifulSoup as BS
 
 IDENTICAL = 1.0
 TOP_NUMBER = 10
@@ -14,13 +15,20 @@ def get_tags():
     """Find all tags (TAG_HTML) in RSS_FEED.
     Replace dash with whitespace.
     Hint: use TAG_HTML.findall"""
-    pass
+    tags = []
+    with open(RSS_FEED) as f:
+        soup = BS(f, 'xml')
+        for tag in soup.find_all('category'):
+            tags.append(tag.text)
+    return tags
 
 
 def get_top_tags(tags):
     """Get the TOP_NUMBER of most common tags
     Hint: use most_common method of Counter (already imported)"""
-    pass
+    top_tags = Counter(tags).most_common(TOP_NUMBER)
+
+    return top_tags
 
 
 def get_similarities(tags):
@@ -31,14 +39,14 @@ def get_similarities(tags):
     pass
 
 
-if __name__ == "__main__":
-    tags = get_tags()
-    top_tags = get_top_tags(tags)
-    print('* Top {} tags:'.format(TOP_NUMBER))
-    for tag, count in top_tags:
-        print('{:<20} {}'.format(tag, count))
-    similar_tags = dict(get_similarities(tags))
-    print()
-    print('* Similar tags:')
-    for singular, plural in similar_tags.items():
-        print('{:<20} {}'.format(singular, plural))
+# if __name__ == "__main__":
+#     tags = get_tags()
+#     top_tags = get_top_tags(tags)
+#     print('* Top {} tags:'.format(TOP_NUMBER))
+#     for tag, count in top_tags:
+#         print('{:<20} {}'.format(tag, count))
+#     similar_tags = dict(get_similarities(tags))
+#     print()
+#     print('* Similar tags:')
+#     for singular, plural in similar_tags.items():
+#         print('{:<20} {}'.format(singular, plural))
